@@ -27,8 +27,8 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Collection<Product> findAll() throws ResourceNotFoundException{
-        LOGGER.info("Find all products:");
+    public Collection<Product> findAll(){
+        LOGGER.info("Find all products");
         List<Product> allProduct = productRepository.findAll();
         if (allProduct.isEmpty()){
             throw new ResourceNotFoundException("Product's not found");
