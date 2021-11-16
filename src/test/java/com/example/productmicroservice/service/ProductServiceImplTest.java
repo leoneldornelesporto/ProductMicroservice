@@ -1,5 +1,6 @@
 package com.example.productmicroservice.service;
 
+import com.example.productmicroservice.controller.request.ProductRequest;
 import com.example.productmicroservice.domain.Product;
 import com.example.productmicroservice.repository.ProductRepository;
 import org.junit.Assert;
@@ -40,7 +41,7 @@ public class ProductServiceImplTest {
     }
 
     @Test
-    void deveriaDeletarProduct(){
+    void deveriaAlterarProduct(){
         Product product = product();
 
         Mockito.when(service.findByUuid(Mockito.any()))
@@ -48,8 +49,18 @@ public class ProductServiceImplTest {
 
         service.findByUuid("PROD-56756JJHFG5");
 
-        Assertions.assertEquals("Sapato",product.getName());
-        Assertions.assertEquals("Rosa",product.getColor());
+        Mockito.when(service.save(Mockito.any()))
+                .thenReturn(product);
+
+        service.save(new ProductRequest("Sapato","Rosa"));
+
+        Mockito.when(service.update(Mockito.any(),Mockito.any()))
+                .thenReturn(product);
+
+        Product update = service.update("PROD-56756JJHFG5", new ProductRequest("Sapato","Rosa"));
+
+        Assertions.assertEquals("Sapato",update.getName());
+        Assertions.assertEquals("Rosa",update.getColor());
         Assertions.assertTrue(product.getActive());
     }
 
@@ -57,12 +68,10 @@ public class ProductServiceImplTest {
     void deveriaRetornarProdutosPorUuid(){
         List<Product> productCollection = listaDeProdutos();
 
-        Mockito.when(service.findAll())
-                .thenReturn(productCollection);
+        Mockito.when(service.findByUuid(Mockito.any()))
+                .thenReturn(productCollection.get(0));
 
-        service.findAll();
-
-        Product product = productCollection.get(0);
+        Product product = service.findByUuid("PROD-56756JJHFG5");
         Assert.assertTrue(product.getActive());
     }
 
