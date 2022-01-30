@@ -1,7 +1,7 @@
-package com.example.productmicroservice.controller.converter;
+package com.example.productmicroservices.controller.converter;
 
-import com.example.productmicroservice.controller.response.ProductResponse;
-import com.example.productmicroservice.domain.Product;
+import com.example.productmicroservices.controller.response.ProductResponse;
+import com.example.productmicroservices.domain.Product;
 import org.springframework.stereotype.Component;
 
 @Component

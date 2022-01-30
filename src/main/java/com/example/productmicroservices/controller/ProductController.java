@@ -1,10 +1,11 @@
-package com.example.productmicroservice.controller;
+package com.example.productmicroservices.controller;
 
-import com.example.productmicroservice.controller.converter.ProductResponseConverter;
-import com.example.productmicroservice.controller.request.ProductRequest;
-import com.example.productmicroservice.controller.response.ProductResponse;
-import com.example.productmicroservice.domain.Product;
-import com.example.productmicroservice.service.ProductService;
+import com.example.productmicroservices.controller.converter.ProductResponseConverter;
+import com.example.productmicroservices.controller.request.ProductRequest;
+import com.example.productmicroservices.controller.request.ProductUpdateRequest;
+import com.example.productmicroservices.controller.response.ProductResponse;
+import com.example.productmicroservices.domain.Product;
+import com.example.productmicroservices.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 
 @RestController
@@ -22,15 +24,13 @@ public class ProductController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
 
     @Autowired
-    ProductService productService;
+    private ProductService productService;
 
     @Autowired
-    ProductResponseConverter productResponseConverter;
+    private ProductResponseConverter productResponseConverter;
 
     @PostMapping
-    public ResponseEntity<? extends ProductResponse> save(
-            @RequestBody @Validated ProductRequest request
-            ){
+    public ResponseEntity<? extends ProductResponse> save(@RequestBody @Validated ProductRequest request){
         LOGGER.info("stage=init method=ProductController.save message=Save Product Request={}", request.toString());
         Product product = productService.save(request);
         ProductResponse response = productResponseConverter.fromEntity(product);
@@ -39,8 +39,9 @@ public class ProductController {
     }
 
     @PutMapping("/{uuid}")
+    @Transactional
     public ResponseEntity<? extends ProductResponse> update(@PathVariable String uuid,
-            @RequestBody @Validated ProductRequest request
+                                                            @RequestBody @Validated ProductUpdateRequest request
     ){
         LOGGER.info("stage=init method=ProductController.update message=Update Product Request={}", request.toString());
         Product product = productService.update(uuid,request);

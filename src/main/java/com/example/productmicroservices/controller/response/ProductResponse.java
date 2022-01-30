@@ -1,8 +1,7 @@
-package com.example.productmicroservice.controller.response;
+package com.example.productmicroservices.controller.response;
 
-import com.example.productmicroservice.domain.Product;
-import lombok.Getter;
-import lombok.Setter;
+import com.example.productmicroservices.domain.Product;
+import lombok.*;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -10,7 +9,6 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class ProductResponse {
-
     private String uuid;
     private String name;
     private String color;
