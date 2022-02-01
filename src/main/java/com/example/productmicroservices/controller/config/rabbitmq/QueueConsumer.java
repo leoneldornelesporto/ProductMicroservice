@@ -1,4 +1,4 @@
-package com.example.productmicroservices.controller.rabbitmq;
+package com.example.productmicroservices.controller.config.rabbitmq;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.handler.annotation.Payload;
