@@ -1,11 +1,13 @@
 package com.example.productmicroservices.controller;
 
+import com.example.productmicroservices.controller.config.rabbitmq.constantes.RabbitmqConstantes;
 import com.example.productmicroservices.controller.converter.ProductResponseConverter;
 import com.example.productmicroservices.controller.request.ProductRequest;
 import com.example.productmicroservices.controller.request.ProductUpdateRequest;
 import com.example.productmicroservices.controller.response.ProductResponse;
 import com.example.productmicroservices.domain.Product;
 import com.example.productmicroservices.service.ProductService;
+import com.example.productmicroservices.service.RabbitmqService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class ProductController {
     private ProductService productService;
 
     @Autowired
+    private RabbitmqService rabbitmqService;
+
+    @Autowired
     private ProductResponseConverter productResponseConverter;
 
     @PostMapping
@@ -46,6 +51,7 @@ public class ProductController {
         LOGGER.info("stage=init method=ProductController.update message=Update Product Request={}", request.toString());
         Product product = productService.update(uuid,request);
         ProductResponse response = productResponseConverter.fromEntity(product);
+        this.rabbitmqService.enviaMensagem(RabbitmqConstantes.FILA_ESTOQUE,request);
         LOGGER.info("stage=end method=ProductController.update message=Save Product Response={}", response.toString());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

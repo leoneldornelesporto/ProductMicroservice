@@ -1,9 +1,11 @@
-package com.example.productmicroservices;
+package com.example.productmicroservices.controller;
 
 import com.example.productmicroservices.domain.Product;
 import com.example.productmicroservices.repository.ProductRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class ProductMicroservicesEndpointTest {
+class ProductControllerTest {
+
     @Autowired
     private TestRestTemplate restTemplate;
     @LocalServerPort
@@ -34,18 +38,36 @@ public class ProductMicroservicesEndpointTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    public void getProductsByUuid(){
-        ResponseEntity<String> forEntity = restTemplate.getForEntity("/api/v1/product/PROD-95d98b0c-7bf9-4fe0-9319-1a59311bd75c", String.class);
-        Assertions.assertThat(forEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    @BeforeEach
+    void setUp() {
+    }
+
+    @AfterEach
+    void tearDown() {
     }
 
     @Test
-    public void listProductShouldReturnStatusCode200(){
+    void save() {
         List<Product> productList = asList(new Product("PROD-eff3d343-f076-43e5-99de-4907e624c379","Coca Cola","Red",Boolean.TRUE),
                 new Product("PROD-eff3d343-f076-43e5-91de-4907e624c334","Fanta","Blue",Boolean.TRUE));
         BDDMockito.when(productRepository.findAll()).thenReturn(productList);
         ResponseEntity<String> forEntity = restTemplate.getForEntity("/api/v1/product/", String.class);
         Assertions.assertThat(forEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    void update() {
+    }
+
+    @Test
+    void delete() {
+    }
+
+    @Test
+    void findAllProducts() {
+    }
+
+    @Test
+    void findProductByUuid() {
     }
 }
